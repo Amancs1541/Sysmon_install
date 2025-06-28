@@ -204,7 +204,7 @@ By Event Data Value:
 ## 🔹 Basic XPath Structure for Sysmon Logs
 Sysmon logs follow a standard event structure:
 
--- xml
+```xml
 Copy
 Edit
 <Event>
@@ -218,7 +218,7 @@ Edit
     ...
   </EventData>
 </Event>
---
+```
 
 | Goal                            | XPath Filter                                       |
 | ------------------------------- | -------------------------------------------------- |
