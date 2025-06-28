@@ -171,3 +171,58 @@ Logs all DNS queries. Ideal for spotting unusual or malicious domains.
 ## Conclusion
 
 Sysmon is a powerful tool for endpoint visibility and threat hunting. With customizable configs and granular Event ID controls, it forms a crucial layer in a defense-in-depth strategy. Depending on your environment and threat model, choose between **inclusion-heavy** or **exclusion-heavy** configurations, and continuously tune rules for effectiveness.
+
+## ⚙️ Sysmon Best Practices
+Practice	Description
+Exclude > Include	Exclude known good activity to avoid false positives while still catching suspicious behavior.
+
+Use CLI tools	Tools like Get-WinEvent and wevutil.exe allow granular filtering far beyond what Event Viewer allows.
+
+Know Your Environment	Tailor rules to what's “normal” in your network to better catch anomalies.
+
+🛠️ Filtering Logs
+📋 Using Event Viewer
+Use Filter Current Log to apply EventID-based filters.
+
+XML filters are possible, but manual and not scalable.
+
+⚡ Using PowerShell
+Use Get-WinEvent for custom XPath queries.
+
+Get-WinEvent -Path <PathToLog.evtx> -FilterXPath '*/System/EventID=3 and */EventData/Data[@Name="DestinationPort"] and */EventData/Data=4444'
+
+🔍 Filter Syntax Summary
+By Event ID:
+*/System/EventID=ID
+
+By XML Attribute Name:
+*/EventData/Data[@Name="Attribute"]
+
+By Event Data Value:
+*/EventData/Data=Value
+
+## 🔹 Basic XPath Structure for Sysmon Logs
+Sysmon logs follow a standard event structure:
+
+-- xml
+Copy
+Edit
+<Event>
+  <System>
+    <EventID>3</EventID>
+    ...
+  </System>
+  <EventData>
+    <Data Name="Image">C:\malware.exe</Data>
+    <Data Name="DestinationPort">4444</Data>
+    ...
+  </EventData>
+</Event>
+--
+
+| Goal                            | XPath Filter                                       |
+| ------------------------------- | -------------------------------------------------- |
+| **Filter by EventID**           | `*/System/EventID=3`                               |
+| **Filter by Data Name**         | `*/EventData/Data[@Name="Image"]`                  |
+| **Filter by Data Value**        | `*/EventData/Data='C:\malware.exe'`                |
+| **Filter by Attribute + Value** | `*/EventData/Data[@Name="DestinationPort"]='4444'` |
